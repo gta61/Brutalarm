@@ -8,20 +8,91 @@
     android:orientation="vertical"
     >
 
-    <soup.neumorphism.NeumorphImageButton
-        android:layout_width="300dp"
-        android:layout_height="100dp"
-        android:scaleType="centerInside"
-        android:src="@drawable/baseline_access_time_filled_24"
-        app:layout_constraintBottom_toBottomOf="parent"
+    <soup.neumorphism.NeumorphButton
+        android:layout_width="359dp"
+        android:layout_height="56dp"
+        android:layout_marginBottom="20dp"
+        android:gravity="center"
+        android:text="Brutalarm"
+        app:layout_constraintBottom_toTopOf="@+id/neumorphButton"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.36"
+        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.004"
-        app:neumorph_shapeType="flat" />
+        app:layout_constraintVertical_bias="0.484" />
+
+    <soup.neumorphism.NeumorphButton
+        android:id="@+id/neumorphButton"
+        android:layout_width="200dp"
+        android:layout_height="100dp"
+        android:layout_marginEnd="28dp"
+        android:gravity="center"
+        android:text="00:00"
+        app:layout_constraintBottom_toBottomOf="@+id/linearLayout"
+        app:layout_constraintEnd_toStartOf="@+id/linearLayout"
+        app:layout_constraintHorizontal_bias="0.701"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/linearLayout"
+        app:layout_constraintVertical_bias="0.0" />
+
+
+    <soup.neumorphism.NeumorphButton
+        android:layout_width="200dp"
+        android:layout_height="100dp"
+        android:layout_marginEnd="28dp"
+        android:gravity="center"
+        android:text="00:00"
+        app:layout_constraintBottom_toBottomOf="@+id/linearLayout"
+        app:layout_constraintEnd_toStartOf="@+id/linearLayout"
+        app:layout_constraintHorizontal_bias="0.701"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/linearLayout"
+        app:layout_constraintVertical_bias="0.195" />
+
+
+    <soup.neumorphism.NeumorphButton
+        android:id="@+id/neumorphButton2"
+        android:layout_width="200dp"
+        android:layout_height="100dp"
+        android:layout_marginEnd="28dp"
+        android:gravity="center"
+        android:text="00:00"
+        app:layout_constraintBottom_toBottomOf="@+id/linearLayout"
+        app:layout_constraintEnd_toStartOf="@+id/linearLayout"
+        app:layout_constraintHorizontal_bias="0.701"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/linearLayout"
+        app:layout_constraintVertical_bias="0.783" />
+
+    <soup.neumorphism.NeumorphButton
+        android:layout_width="200dp"
+        android:layout_height="100dp"
+        android:layout_marginEnd="28dp"
+        android:gravity="center"
+        android:text="00:00"
+        app:neumorph_shapeType="pressed"
+        app:layout_constraintBottom_toBottomOf="@+id/linearLayout"
+        app:layout_constraintEnd_toStartOf="@+id/linearLayout"
+        app:layout_constraintHorizontal_bias="0.701"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/linearLayout"
+        app:layout_constraintVertical_bias="0.587" />
+
+    <soup.neumorphism.NeumorphButton
+        android:layout_width="200dp"
+        android:layout_height="100dp"
+        android:layout_marginEnd="28dp"
+        android:gravity="center"
+        android:text="00:00"
+        app:layout_constraintBottom_toBottomOf="@+id/linearLayout"
+        app:layout_constraintEnd_toStartOf="@+id/linearLayout"
+        app:layout_constraintHorizontal_bias="0.701"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/linearLayout"
+        app:layout_constraintVertical_bias="0.392" />
 
     <LinearLayout
+        android:id="@+id/linearLayout"
         android:layout_width="100dp"
         android:layout_height="612dp"
         android:orientation="vertical"
@@ -44,8 +115,8 @@
             android:layout_width="100dp"
             android:layout_height="100dp"
             android:scaleType="centerInside"
-            android:src="@drawable/baseline_back_hand_24"
-            app:neumorph_shapeType="pressed" />
+            android:src="@drawable/baseline_circle_notifications_24"
+            app:neumorph_shapeType="flat" />
 
         <soup.neumorphism.NeumorphImageButton
             android:layout_width="100dp"
@@ -67,16 +138,19 @@
             android:scaleType="centerInside"
             android:src="@drawable/baseline_circle_notifications_24"
             app:neumorph_shapeType="flat" />
-
-        <soup.neumorphism.NeumorphImageButton
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:scaleType="centerInside"
-            android:src="@drawable/baseline_back_hand_24"
-            app:neumorph_shapeType="pressed" />
 
 
     </LinearLayout>
+
+    <soup.neumorphism.NeumorphImageButton
+        android:layout_width="75dp"
+        android:layout_height="75dp"
+        android:scaleType="centerInside"
+        android:src="@drawable/baseline_grid_goldenratio_24"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/neumorphButton2" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
