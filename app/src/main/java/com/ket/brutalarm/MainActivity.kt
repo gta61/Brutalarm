@@ -2,29 +2,45 @@ package com.ket.brutalarm
 
 import android.annotation.SuppressLint // the Pressed was underline because i could only be access withing the library so this fixes it.
 import android.app.TimePickerDialog
+import android.content.Context
 import android.icu.util.Calendar
+import android.media.MediaPlayer
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.format.DateFormat
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatDelegate
 import soup.neumorphism.NeumorphButton
 import soup.neumorphism.NeumorphImageButton
 import soup.neumorphism.ShapeType.Companion.FLAT
 import soup.neumorphism.ShapeType.Companion.PRESSED
+import kotlin.random.Random
 
 class MainActivity : AppCompatActivity() {
 
      private lateinit var buttonDisplayTime1 : NeumorphButton
      private lateinit var buttonRing1 : NeumorphImageButton
      var alarmOn = false
-
+    lateinit private var mediaPlayer: MediaPlayer
 
     @SuppressLint("RestrictedApi")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+
+
+
+
+
+
+        mediaPlayer = MediaPlayer.create(this, R.raw.brutalshortsound1)
+        mediaPlayer.setLooping(true) // Set looping for continuous playback
+        mediaPlayer.setVolume(0.5f, 0.5f) // reducing the volume to eliminate distortion/peaking
+        mediaPlayer.start()
+
+
+
 
         // the text on the button diplays the time the user picked
         buttonDisplayTime1 = findViewById(R.id.Button1)
@@ -106,6 +122,18 @@ class MainActivity : AppCompatActivity() {
 
         // Create a new instance of TimePickerDialog and show it
         TimePickerDialog(this, timeSetListener, hour, minute, DateFormat.is24HourFormat(this)).show()
+    }
+
+
+    override fun onStop() {
+        super.onStop() // has to be recalled
+        mediaPlayer.pause()
+    }
+
+    override fun onResume() {
+        super.onResume() // has to be recalled
+        mediaPlayer.start()
+
     }
 
 
