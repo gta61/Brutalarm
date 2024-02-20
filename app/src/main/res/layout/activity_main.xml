@@ -14,15 +14,29 @@
         android:layout_marginBottom="20dp"
         android:gravity="center"
         android:text="Brutalarm"
-        app:layout_constraintBottom_toTopOf="@+id/neumorphButton"
+        app:layout_constraintBottom_toTopOf="@+id/Button1"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.484" />
 
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/showtext"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+    </LinearLayout>
+
+
+
     <soup.neumorphism.NeumorphButton
-        android:id="@+id/neumorphButton"
+        android:id="@+id/Button1"
         android:layout_width="200dp"
         android:layout_height="100dp"
         android:layout_marginEnd="28dp"
@@ -37,6 +51,7 @@
 
 
     <soup.neumorphism.NeumorphButton
+        android:id="@+id/Button2"
         android:layout_width="200dp"
         android:layout_height="100dp"
         android:layout_marginEnd="28dp"
@@ -49,36 +64,8 @@
         app:layout_constraintTop_toTopOf="@+id/linearLayout"
         app:layout_constraintVertical_bias="0.195" />
 
-
     <soup.neumorphism.NeumorphButton
-        android:id="@+id/neumorphButton2"
-        android:layout_width="200dp"
-        android:layout_height="100dp"
-        android:layout_marginEnd="28dp"
-        android:gravity="center"
-        android:text="00:00"
-        app:layout_constraintBottom_toBottomOf="@+id/linearLayout"
-        app:layout_constraintEnd_toStartOf="@+id/linearLayout"
-        app:layout_constraintHorizontal_bias="0.701"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/linearLayout"
-        app:layout_constraintVertical_bias="0.783" />
-
-    <soup.neumorphism.NeumorphButton
-        android:layout_width="200dp"
-        android:layout_height="100dp"
-        android:layout_marginEnd="28dp"
-        android:gravity="center"
-        android:text="00:00"
-        app:neumorph_shapeType="pressed"
-        app:layout_constraintBottom_toBottomOf="@+id/linearLayout"
-        app:layout_constraintEnd_toStartOf="@+id/linearLayout"
-        app:layout_constraintHorizontal_bias="0.701"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/linearLayout"
-        app:layout_constraintVertical_bias="0.587" />
-
-    <soup.neumorphism.NeumorphButton
+        android:id="@+id/Button3"
         android:layout_width="200dp"
         android:layout_height="100dp"
         android:layout_marginEnd="28dp"
@@ -90,6 +77,9 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/linearLayout"
         app:layout_constraintVertical_bias="0.392" />
+
+
+
 
     <LinearLayout
         android:id="@+id/linearLayout"
@@ -125,19 +115,7 @@
             android:src="@drawable/baseline_circle_notifications_24"
             app:neumorph_shapeType="flat" />
 
-        <soup.neumorphism.NeumorphImageButton
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:scaleType="centerInside"
-            android:src="@drawable/baseline_back_hand_24"
-            app:neumorph_shapeType="pressed" />
 
-        <soup.neumorphism.NeumorphImageButton
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:scaleType="centerInside"
-            android:src="@drawable/baseline_circle_notifications_24"
-            app:neumorph_shapeType="flat" />
 
 
     </LinearLayout>
@@ -150,7 +128,9 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/neumorphButton2" />
+        app:layout_constraintTop_toBottomOf="@+id/Button3" />
+
+
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
