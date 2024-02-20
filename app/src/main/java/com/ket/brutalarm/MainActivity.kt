@@ -2,6 +2,7 @@ package com.ket.brutalarm
 
 import android.annotation.SuppressLint // the Pressed was underline because i could only be access withing the library so this fixes it.
 import android.app.TimePickerDialog
+import android.content.BroadcastReceiver
 import android.icu.util.Calendar
 import android.media.MediaPlayer
 import androidx.appcompat.app.AppCompatActivity
@@ -12,6 +13,17 @@ import soup.neumorphism.NeumorphButton
 import soup.neumorphism.NeumorphImageButton
 import soup.neumorphism.ShapeType.Companion.FLAT
 import soup.neumorphism.ShapeType.Companion.PRESSED
+// added du to alarm manager and  classes
+import android.content.Context
+import android.content.Intent
+
+import android.app.PendingIntent
+import android.app.AlarmManager
+import android.app.PendingIntent.FLAG_UPDATE_CURRENT
+import android.os.Build
+
+
+
 
 class MainActivity : AppCompatActivity() {
 
@@ -106,27 +118,53 @@ class MainActivity : AppCompatActivity() {
 
 
     private fun showTimePickerDialog() {
-        // Use the current time as the default values for the picker
         val calendar = Calendar.getInstance()
-        val hour = calendar.get(Calendar.HOUR_OF_DAY)
-        val minute = calendar.get(Calendar.MINUTE)
+        val currentHour = calendar.get(Calendar.HOUR_OF_DAY)
+        val currentMinute = calendar.get(Calendar.MINUTE)
 
-        // Create and show a TimePickerDialog
         val timeSetListener = TimePickerDialog.OnTimeSetListener { _, hourOfDay, minute ->
             val time = String.format("%02d:%02d", hourOfDay, minute)
-            buttonDisplayTime1.text = time // Update the TextView with the selected time
+            buttonDisplayTime1.text = time
 
-            // Save the selected time to Shared Preferences
             val sharedPref = getSharedPreferences("com.ket.brutalarm.PREFERENCE_FILE_KEY", MODE_PRIVATE)
             with(sharedPref.edit()) {
                 putString("SELECTED_TIME", time)
                 apply()
             }
+
+            val alarmCalendar = Calendar.getInstance().apply {
+                set(Calendar.HOUR_OF_DAY, hourOfDay)
+                set(Calendar.MINUTE, minute)
+                set(Calendar.SECOND, 0)
+            }
+
+            val alarmIntent = Intent(this, AlarmReceiver::class.java)
+            val pendingIntent: PendingIntent
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                val alarmCanSchedule = getSystemService(AlarmManager::class.java).canScheduleExactAlarms()
+                if (!alarmCanSchedule) {
+                    // Redirect the user to the settings to get the right permissions
+                    val intent = Intent(android.provider.Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM)
+                    startActivity(intent)
+                    return@OnTimeSetListener
+                }
+            }
+
+            pendingIntent = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                PendingIntent.getBroadcast(this, 0, alarmIntent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
+            } else {
+                PendingIntent.getBroadcast(this, 0, alarmIntent, PendingIntent.FLAG_UPDATE_CURRENT)
+            }
+
+            val alarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
+            alarmManager.setExact(AlarmManager.RTC_WAKEUP, alarmCalendar.timeInMillis, pendingIntent)
         }
 
-        // Create a new instance of TimePickerDialog and show it
-        TimePickerDialog(this, timeSetListener, hour, minute, DateFormat.is24HourFormat(this)).show()
+        TimePickerDialog(this, timeSetListener, currentHour, currentMinute, DateFormat.is24HourFormat(this)).show()
     }
+
+
 
 
     fun isRingingTime(){
@@ -155,6 +193,18 @@ class MainActivity : AppCompatActivity() {
         //mediaPlayer.start()
 
     }
+
+
+    /*
+    class AlarmReceiver : BroadcastReceiver() {
+        override fun onReceive(context: Context?, intent: Intent?) {
+            // Initialize and start MediaPlayer to play sound
+            val mediaPlayer: MediaPlayer? = MediaPlayer.create(context, R.raw.brutalshortsound1)
+            mediaPlayer?.setLooping(true)
+            mediaPlayer?.setVolume(0.5f, 0.5f)
+            mediaPlayer?.start()
+        }
+    }*/
 
 
     }
