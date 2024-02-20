@@ -97,7 +97,7 @@
             android:layout_height="100dp"
             android:scaleType="centerInside"
             android:src="@drawable/baseline_circle_notifications_24"
-            app:neumorph_shapeType="pressed" />
+            app:neumorph_shapeType="flat" />
 
         <soup.neumorphism.NeumorphImageButton
             android:id="@+id/buttonRing3"

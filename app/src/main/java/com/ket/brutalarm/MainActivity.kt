@@ -1,7 +1,6 @@
 package com.ket.brutalarm
 
 import android.annotation.SuppressLint // the Pressed was underline because i could only be access withing the library so this fixes it.
-import android.app.AlarmManager
 import android.app.TimePickerDialog
 import android.icu.util.Calendar
 import androidx.appcompat.app.AppCompatActivity
@@ -20,6 +19,7 @@ class MainActivity : AppCompatActivity() {
      var alarmOn = false
 
 
+    @SuppressLint("RestrictedApi")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -31,9 +31,25 @@ class MainActivity : AppCompatActivity() {
         buttonRing1 = findViewById(R.id.buttonRing1)
 
         // Restore the saved time if it exists
-        val sharedPref = getSharedPreferences("com.ket.brutalarm.PREFERENCE_FILE_KEY", MODE_PRIVATE)
-        buttonDisplayTime1.text = sharedPref.getString("SELECTED_TIME", "00:00") // Use a default value if not found
+        val sharedPrefDisplayTime = getSharedPreferences("com.ket.brutalarm.PREFERENCE_FILE_KEY", MODE_PRIVATE)
+        buttonDisplayTime1.text = sharedPrefDisplayTime.getString("SELECTED_TIME", "00:00") // Use a default value if not found
 
+
+        // Restore the saved time if it exists
+        val sharedPrefAlarmState = getSharedPreferences("com.ket.brutalarm.PREFERENCE_FILE_KEY", MODE_PRIVATE)
+        buttonDisplayTime1.text = sharedPrefAlarmState.getString("SELECTED_TIME", "00:00") // Use a default value if not found
+
+        // Restore the alarm state
+        val alarmState = sharedPrefAlarmState.getBoolean("ALARM_STATE", false)
+        if(alarmState){
+            buttonRing1.setShapeType(PRESSED)
+            buttonRing1.setImageResource(R.drawable.baseline_block_24)
+            buttonDisplayTime1.setShapeType(PRESSED)
+        } else {
+            buttonRing1.setShapeType(FLAT)
+            buttonRing1.setImageResource(R.drawable.baseline_circle_notifications_24)
+            buttonDisplayTime1.setShapeType(FLAT)
+        }
 
         buttonDisplayTime1.setOnClickListener {
             showTimePickerDialog()
@@ -48,22 +64,26 @@ class MainActivity : AppCompatActivity() {
 
 
     @SuppressLint("RestrictedApi")
-    private fun switchAlarmOnOff(buttonRing: NeumorphImageButton,buttonDisplayTime: NeumorphButton ){
+    private fun switchAlarmOnOff(buttonRing: NeumorphImageButton, buttonDisplayTime: NeumorphButton){
+        val sharedPref = getSharedPreferences("com.ket.brutalarm.PREFERENCE_FILE_KEY", MODE_PRIVATE)
+        val editor = sharedPref.edit()
 
         // Change the neumorph_shapeType and Change the image source
-        if (buttonRing.getShapeType()== FLAT ){
+        if (buttonRing.getShapeType() == FLAT){
             buttonRing.setShapeType(PRESSED)
             buttonRing.setImageResource(R.drawable.baseline_block_24)
             buttonDisplayTime.setShapeType(PRESSED)
-            alarmOn= true
-        }
-         else{
-             buttonRing.setShapeType(FLAT)
+            editor.putBoolean("ALARM_STATE", true)
+        } else {
+            buttonRing.setShapeType(FLAT)
             buttonRing.setImageResource(R.drawable.baseline_circle_notifications_24)
             buttonDisplayTime.setShapeType(FLAT)
-            alarmOn= false
-         }
+            editor.putBoolean("ALARM_STATE", false)
+        }
+
+        editor.apply() // Save the changes
     }
+
 
     private fun showTimePickerDialog() {
         // Use the current time as the default values for the picker
