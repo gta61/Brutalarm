@@ -2,19 +2,16 @@ package com.ket.brutalarm
 
 import android.annotation.SuppressLint // the Pressed was underline because i could only be access withing the library so this fixes it.
 import android.app.TimePickerDialog
-import android.content.Context
 import android.icu.util.Calendar
 import android.media.MediaPlayer
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.format.DateFormat
-import android.widget.TextView
 import androidx.appcompat.app.AppCompatDelegate
 import soup.neumorphism.NeumorphButton
 import soup.neumorphism.NeumorphImageButton
 import soup.neumorphism.ShapeType.Companion.FLAT
 import soup.neumorphism.ShapeType.Companion.PRESSED
-import kotlin.random.Random
 
 class MainActivity : AppCompatActivity() {
 
@@ -30,18 +27,7 @@ class MainActivity : AppCompatActivity() {
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
 
 
-
-
-
-
-        mediaPlayer = MediaPlayer.create(this, R.raw.brutalshortsound1)
-        mediaPlayer.setLooping(true) // Set looping for continuous playback
-        mediaPlayer.setVolume(0.5f, 0.5f) // reducing the volume to eliminate distortion/peaking
-        mediaPlayer.start()
-
-
-
-
+        initiliazeMediaplayer ()
         // the text on the button diplays the time the user picked
         buttonDisplayTime1 = findViewById(R.id.Button1)
         buttonRing1 = findViewById(R.id.buttonRing1)
@@ -61,10 +47,14 @@ class MainActivity : AppCompatActivity() {
             buttonRing1.setShapeType(PRESSED)
             buttonRing1.setImageResource(R.drawable.baseline_block_24)
             buttonDisplayTime1.setShapeType(PRESSED)
+            initiliazeMediaplayer ()
+            //mediaPlayer.start()
         } else {
             buttonRing1.setShapeType(FLAT)
             buttonRing1.setImageResource(R.drawable.baseline_circle_notifications_24)
             buttonDisplayTime1.setShapeType(FLAT)
+            initiliazeMediaplayer ()
+            //mediaPlayer.pause()
         }
 
         buttonDisplayTime1.setOnClickListener {
@@ -76,8 +66,19 @@ class MainActivity : AppCompatActivity() {
             //sending the button to the switchfunction that will then also modify the display
             switchAlarmOnOff (buttonRing1, buttonDisplayTime1)
         }
+
+
+        isRingingTime()
     }
 
+
+    fun initiliazeMediaplayer (){
+
+        mediaPlayer = MediaPlayer.create(this, R.raw.brutalshortsound1)
+        mediaPlayer.setLooping(true) // Set looping for continuous playback
+        mediaPlayer.setVolume(0.5f, 0.5f) // reducing the volume to eliminate distortion/peaking
+
+    }
 
     @SuppressLint("RestrictedApi")
     private fun switchAlarmOnOff(buttonRing: NeumorphImageButton, buttonDisplayTime: NeumorphButton){
@@ -89,11 +90,14 @@ class MainActivity : AppCompatActivity() {
             buttonRing.setShapeType(PRESSED)
             buttonRing.setImageResource(R.drawable.baseline_block_24)
             buttonDisplayTime.setShapeType(PRESSED)
+            initiliazeMediaplayer ()
+            //mediaPlayer.start()
             editor.putBoolean("ALARM_STATE", true)
         } else {
             buttonRing.setShapeType(FLAT)
             buttonRing.setImageResource(R.drawable.baseline_circle_notifications_24)
             buttonDisplayTime.setShapeType(FLAT)
+            mediaPlayer.pause() // stops sound when pressed
             editor.putBoolean("ALARM_STATE", false)
         }
 
@@ -125,6 +129,22 @@ class MainActivity : AppCompatActivity() {
     }
 
 
+    fun isRingingTime(){
+        val calendar = Calendar.getInstance()
+        val hour = calendar.get(Calendar.HOUR_OF_DAY)
+        val minute = calendar.get(Calendar.MINUTE)
+        val currentTime = String.format("%02d:%02d", hour, minute)
+        val userTime = buttonDisplayTime1.text.toString()
+
+        // start playing sound
+        if (currentTime == userTime ){
+            initiliazeMediaplayer()
+            mediaPlayer.start()
+
+        }
+    }
+
+
     override fun onStop() {
         super.onStop() // has to be recalled
         mediaPlayer.pause()
@@ -132,7 +152,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume() // has to be recalled
-        mediaPlayer.start()
+        //mediaPlayer.start()
 
     }
 
