@@ -10,7 +10,7 @@ class AlarmReceiver : BroadcastReceiver() {
         val mediaPlayer: MediaPlayer? = MediaPlayer.create(context, R.raw.brutalshortsound1)
         mediaPlayer?.apply {
             isLooping = true
-            setVolume(0.5f, 0.5f)
+            setVolume(0.9f, 0.9f)
             start()
         }
     }
