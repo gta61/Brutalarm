@@ -165,8 +165,6 @@ class MainActivity : AppCompatActivity() {
     }
 
 
-
-
     fun isRingingTime(){
         val calendar = Calendar.getInstance()
         val hour = calendar.get(Calendar.HOUR_OF_DAY)
@@ -182,7 +180,6 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-
     override fun onStop() {
         super.onStop() // has to be recalled
         mediaPlayer.pause()
@@ -193,18 +190,6 @@ class MainActivity : AppCompatActivity() {
         //mediaPlayer.start()
 
     }
-
-
-    /*
-    class AlarmReceiver : BroadcastReceiver() {
-        override fun onReceive(context: Context?, intent: Intent?) {
-            // Initialize and start MediaPlayer to play sound
-            val mediaPlayer: MediaPlayer? = MediaPlayer.create(context, R.raw.brutalshortsound1)
-            mediaPlayer?.setLooping(true)
-            mediaPlayer?.setVolume(0.5f, 0.5f)
-            mediaPlayer?.start()
-        }
-    }*/
 
 
     }
