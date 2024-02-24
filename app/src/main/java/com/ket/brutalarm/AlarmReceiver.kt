@@ -36,5 +36,5 @@ class AlarmReceiver : BroadcastReceiver() {
             setVolume(0.9f, 0.9f)
             start()
         }
-    }
+    } 
 }

@@ -20,29 +20,39 @@ import android.content.Intent
 import android.app.PendingIntent
 import android.app.AlarmManager
 import android.app.PendingIntent.FLAG_UPDATE_CURRENT
+import android.hardware.Sensor
+import android.hardware.SensorEvent
+import android.hardware.SensorEventListener
+import android.hardware.SensorManager
 import android.os.Build
 
 
 
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), SensorEventListener {
 
      private lateinit var buttonDisplayTime1 : NeumorphButton
      private lateinit var buttonRing1 : NeumorphImageButton
      var alarmOn = false
     lateinit private var mediaPlayer: MediaPlayer
 
+    private lateinit var sensorManager: SensorManager
+    private lateinit var buttonDisplayTime2 : NeumorphButton
+
     @SuppressLint("RestrictedApi")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)// phone remain in light mode
 
 
         initiliazeMediaplayer ()
         // the text on the button diplays the time the user picked
         buttonDisplayTime1 = findViewById(R.id.Button1)
         buttonRing1 = findViewById(R.id.buttonRing1)
+
+        buttonDisplayTime2 = findViewById(R.id.Button2)// show the sensor data
+        setUpSensor()
 
         // Restore the saved time if it exists
         val sharedPrefDisplayTime = getSharedPreferences("com.ket.brutalarm.PREFERENCE_FILE_KEY", MODE_PRIVATE)
@@ -83,6 +93,11 @@ class MainActivity : AppCompatActivity() {
         isRingingTime()
     }
 
+
+   fun setUpSensor(){
+
+
+    }
 
     fun initiliazeMediaplayer (){
 
@@ -191,6 +206,14 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-
+    override fun onSensorChanged(event: SensorEvent?) {
+        TODO("Not yet implemented")
     }
+
+    override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {
+        TODO("Not yet implemented")
+    }
+
+
+}
 
