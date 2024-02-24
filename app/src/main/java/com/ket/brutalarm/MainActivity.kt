@@ -36,7 +36,7 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
      var alarmOn = false
     lateinit private var mediaPlayer: MediaPlayer
 
-    private lateinit var sensorManager: SensorManager
+    private lateinit var sensorManagerAccelerometer: SensorManager
     private lateinit var buttonDisplayTime2 : NeumorphButton
 
     @SuppressLint("RestrictedApi")
@@ -45,14 +45,14 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
         setContentView(R.layout.activity_main)
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)// phone remain in light mode
 
-
+        setUpSensor()
         initiliazeMediaplayer ()
         // the text on the button diplays the time the user picked
         buttonDisplayTime1 = findViewById(R.id.Button1)
         buttonRing1 = findViewById(R.id.buttonRing1)
 
         buttonDisplayTime2 = findViewById(R.id.Button2)// show the sensor data
-        setUpSensor()
+
 
         // Restore the saved time if it exists
         val sharedPrefDisplayTime = getSharedPreferences("com.ket.brutalarm.PREFERENCE_FILE_KEY", MODE_PRIVATE)
@@ -93,9 +93,13 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
         isRingingTime()
     }
 
-
+// setting up the sensor, and working with the data on sensor change
    fun setUpSensor(){
 
+       sensorManagerAccelerometer = getSystemService(SENSOR_SERVICE) as SensorManager
+       sensorManagerAccelerometer.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)?.also {
+           sensorManagerAccelerometer.registerListener(this, it, SensorManager.SENSOR_DELAY_NORMAL, SensorManager.SENSOR_DELAY_NORMAL)
+       }
 
     }
 
@@ -207,11 +211,22 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
     }
 
     override fun onSensorChanged(event: SensorEvent?) {
-        TODO("Not yet implemented")
+
+        if (event?.sensor?.type == Sensor.TYPE_ACCELEROMETER){
+
+            val xvalue = event.values[0].toString()
+            buttonDisplayTime2.text= xvalue
+        }
     }
 
     override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {
-        TODO("Not yet implemented")
+
+    return
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        sensorManagerAccelerometer.unregisterListener(this)
     }
 
 
