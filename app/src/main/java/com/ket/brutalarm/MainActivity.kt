@@ -31,7 +31,7 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
 
      private lateinit var buttonDisplayTime1 : NeumorphButton
      private lateinit var buttonRing1 : NeumorphImageButton
-    private var localAlarmState = false
+     private var localAlarmState = false
     lateinit private var mediaPlayer: MediaPlayer
 
     private lateinit var sensorManagerAccelerometer: SensorManager
@@ -100,7 +100,7 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
         }
 
 
-        isRingingTime(localAlarmState)
+        isRingingTime()
     }
 
 // setting up the sensor, and working with the data on sensor change
@@ -115,7 +115,7 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
 
     fun initiliazeMediaplayer (){
 
-        mediaPlayer = MediaPlayer.create(this, R.raw.brutalshortsound1)
+        mediaPlayer = MediaPlayer.create(this, R.raw.tiktok)
         mediaPlayer.setVolume(0.5f, 0.5f) // reducing the volume to eliminate distortion/peaking
 
     }
@@ -140,10 +140,12 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
             buttonDisplayTime.setShapeType(FLAT)
             mediaPlayer.pause() // stops sound when pressed
             editor.putBoolean("ALARM_STATE", false)
-           // alarmOn = false
+            localAlarmState = false
+            // alarmOn = false
         }
 
         editor.apply() // Save the changes
+        isRingingTime()
     }
 
 
@@ -195,7 +197,7 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
     }
 
 
-    fun isRingingTime(localAlarmState : Boolean){
+    private fun isRingingTime(){
 
         val calendar = Calendar.getInstance()
         val hour = calendar.get(Calendar.HOUR_OF_DAY)
@@ -204,7 +206,7 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
         val userTime = buttonDisplayTime1.text.toString()
 
         // start playing sound
-        if (currentTime == userTime && localAlarmState ){
+        if (currentTime == userTime && localAlarmState){
             initiliazeMediaplayer()
             mediaPlayer.start()
 

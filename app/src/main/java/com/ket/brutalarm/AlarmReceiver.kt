@@ -43,9 +43,9 @@ class AlarmReceiver : BroadcastReceiver()   {
                 mediaPlayer?.apply {
                    //isLooping = true
                     setVolume(0.9f, 0.9f)
-                    start()
+                    //start()
                 }
 
-        }
+            }
     }
 }
