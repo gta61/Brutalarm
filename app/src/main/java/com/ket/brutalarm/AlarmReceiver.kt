@@ -4,6 +4,7 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.media.MediaPlayer
+import androidx.appcompat.app.AppCompatActivity
 
 /**
  * A BroadcastReceiver that responds to broadcast intents by playing a specific audio file.
@@ -28,13 +29,23 @@ import android.media.MediaPlayer
  */
 
 
-class AlarmReceiver : BroadcastReceiver() {
+class AlarmReceiver : BroadcastReceiver()   {
     override fun onReceive(context: Context?, intent: Intent?) {
-        val mediaPlayer: MediaPlayer? = MediaPlayer.create(context, R.raw.brutalshortsound1)
-        mediaPlayer?.apply {
-            isLooping = true
-            setVolume(0.9f, 0.9f)
-            start()
+
+
+            val sharedPrefAlarmState = context?.getSharedPreferences("com.ket.brutalarm.PREFERENCE_FILE_KEY",
+                AppCompatActivity.MODE_PRIVATE
+            )
+            val isAlarmEnabled = sharedPrefAlarmState?.getBoolean("ALARM_STATE", false) ?: false
+
+            if (isAlarmEnabled ){
+                val mediaPlayer: MediaPlayer? = MediaPlayer.create(context, R.raw.brutalshortsound1)
+                mediaPlayer?.apply {
+                    isLooping = true
+                    setVolume(0.9f, 0.9f)
+                    start()
+                }
+
         }
-    } 
+    }
 }

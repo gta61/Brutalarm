@@ -88,7 +88,7 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
             buttonRing1.setImageResource(R.drawable.baseline_circle_notifications_24)
             buttonDisplayTime1.setShapeType(FLAT)
             initiliazeMediaplayer ()
-            //mediaPlayer.pause()
+           // mediaPlayer.pause()
         }
 
         buttonDisplayTime1.setOnClickListener {
@@ -134,14 +134,16 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
             buttonRing.setImageResource(R.drawable.baseline_block_24)
             buttonDisplayTime.setShapeType(PRESSED)
             initiliazeMediaplayer ()
-            //mediaPlayer.start()
+            mediaPlayer.start()
             editor.putBoolean("ALARM_STATE", true)
+           // alarmOn = true
         } else {
             buttonRing.setShapeType(FLAT)
             buttonRing.setImageResource(R.drawable.baseline_circle_notifications_24)
             buttonDisplayTime.setShapeType(FLAT)
             mediaPlayer.pause() // stops sound when pressed
             editor.putBoolean("ALARM_STATE", false)
+           // alarmOn = false
         }
 
         editor.apply() // Save the changes
