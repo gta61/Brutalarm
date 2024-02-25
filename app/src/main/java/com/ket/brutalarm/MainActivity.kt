@@ -23,8 +23,7 @@ import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
 import android.hardware.SensorManager
 import android.os.Build
-
-
+import kotlin.time.Duration.Companion.hours
 
 
 class MainActivity : AppCompatActivity(), SensorEventListener {
@@ -86,7 +85,7 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
             buttonRing1.setImageResource(R.drawable.baseline_circle_notifications_24)
             buttonDisplayTime1.setShapeType(FLAT)
             //initiliazeMediaplayer ()
-            mediaPlayer.pause()
+            //mediaPlayer.pause()
         }
 
         buttonDisplayTime1.setOnClickListener {
@@ -125,6 +124,9 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
         val sharedPrefAlarmOnOff = getSharedPreferences("com.ket.brutalarm.PREFERENCE_FILE_KEY", MODE_PRIVATE)
         val editor = sharedPrefAlarmOnOff.edit()
 
+        //variable to only desativate the alarm by simple click posible when it is not time to ring
+        val (currentTime, userTime) = getCurrentAndUserTime()
+
         // Change the neumorph_shapeType and Change the image source
         if (buttonRing.getShapeType() == FLAT){
             buttonRing.setShapeType(PRESSED)
@@ -134,13 +136,30 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
             //mediaPlayer.start()
             editor.putBoolean("ALARM_STATE", true)
             localAlarmState = true // tells localy if the alarm is on or off
-        } else {
-            buttonRing.setShapeType(FLAT)
-            buttonRing.setImageResource(R.drawable.baseline_circle_notifications_24)
+        }
+        // change icon for hime to know that he gotta shake the phone to stop it
+        else if (currentTime == userTime){
+            buttonRing.setShapeType(PRESSED)
+            buttonRing.setImageResource(R.drawable.baseline_back_hand_24)
             buttonDisplayTime.setShapeType(FLAT)
-            mediaPlayer.pause() // stops sound when pressed
             editor.putBoolean("ALARM_STATE", false)
             localAlarmState = false
+
+        } else {
+            // deactivate alarm easily with button only if it is not the ringing time
+            if (currentTime != userTime) {
+                buttonRing.setShapeType(FLAT)
+                buttonRing.setImageResource(R.drawable.baseline_circle_notifications_24)
+                buttonDisplayTime.setShapeType(FLAT)
+
+                editor.putBoolean("ALARM_STATE", false)
+                localAlarmState = false
+            } // else only the shaking to stop will be able to make it flat
+
+
+           // mediaPlayer.pause() // stops sound when pressed ( now only stopped in the shake to stp
+           // editor.putBoolean("ALARM_STATE", false)
+            //localAlarmState = false
             // alarmOn = false
         }
 
@@ -197,20 +216,31 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
     }
 
 
-    private fun isRingingTime(){
+    private fun isRingingTime() {
+        //getting data from method for cleaner code
+        val (currentTime, userTime) = getCurrentAndUserTime()
 
+        // start playing sound and check that the alarm was turned on
+        if (currentTime == userTime && localAlarmState) {
+            initiliazeMediaplayer()
+            mediaPlayer.start()
+        }
+    }
+
+
+
+    /**
+     * Retrieves the current time and the user-set time.
+     * @return A Pair containing the current time as the first element and the user-set time as the second element.
+     */
+    private fun getCurrentAndUserTime(): Pair<String, String> {
         val calendar = Calendar.getInstance()
         val hour = calendar.get(Calendar.HOUR_OF_DAY)
         val minute = calendar.get(Calendar.MINUTE)
         val currentTime = String.format("%02d:%02d", hour, minute)
         val userTime = buttonDisplayTime1.text.toString()
 
-        // start playing sound
-        if (currentTime == userTime && localAlarmState){
-            initiliazeMediaplayer()
-            mediaPlayer.start()
-
-        }
+        return Pair(currentTime, userTime)
     }
 
 
@@ -252,7 +282,9 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
     }
     private fun stopAlarmByshaking() {
         mediaPlayer.stop()
-       buttonDisplayTime3.text= "Treshold reached"
+        buttonDisplayTime3.text= "Treshold reached"
+        buttonRing1.setShapeType(FLAT)
+        buttonRing1.setImageResource(R.drawable.baseline_circle_notifications_24)
     }
 
 
