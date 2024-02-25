@@ -141,6 +141,7 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
         else if (currentTime == userTime){
             buttonRing.setShapeType(PRESSED)
             buttonRing.setImageResource(R.drawable.baseline_back_hand_24)
+            buttonDisplayTime3.text= "shake to stop ${userTime}"
             buttonDisplayTime.setShapeType(FLAT)
             editor.putBoolean("ALARM_STATE", false)
             localAlarmState = false
@@ -282,9 +283,11 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
     }
     private fun stopAlarmByshaking() {
         mediaPlayer.stop()
-        buttonDisplayTime3.text= "Treshold reached"
+       // val time = String.format("%02d:%02d", hourOfDay, minute)
+        buttonDisplayTime3.text= "successfully Stop"
         buttonRing1.setShapeType(FLAT)
         buttonRing1.setImageResource(R.drawable.baseline_circle_notifications_24)
+
     }
 
 
