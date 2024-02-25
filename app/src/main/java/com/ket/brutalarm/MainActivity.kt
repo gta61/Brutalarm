@@ -79,14 +79,14 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
             buttonRing1.setShapeType(PRESSED)
             buttonRing1.setImageResource(R.drawable.baseline_block_24)
             buttonDisplayTime1.setShapeType(PRESSED)
-            initiliazeMediaplayer ()
+            //initiliazeMediaplayer ()
             //mediaPlayer.start()
         } else {
             buttonRing1.setShapeType(FLAT)
             buttonRing1.setImageResource(R.drawable.baseline_circle_notifications_24)
             buttonDisplayTime1.setShapeType(FLAT)
-            initiliazeMediaplayer ()
-           // mediaPlayer.pause()
+            //initiliazeMediaplayer ()
+            mediaPlayer.pause()
         }
 
         buttonDisplayTime1.setOnClickListener {
@@ -116,7 +116,6 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
     fun initiliazeMediaplayer (){
 
         mediaPlayer = MediaPlayer.create(this, R.raw.brutalshortsound1)
-        mediaPlayer.setLooping(true) // Set looping for continuous playback
         mediaPlayer.setVolume(0.5f, 0.5f) // reducing the volume to eliminate distortion/peaking
 
     }
@@ -131,7 +130,7 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
             buttonRing.setShapeType(PRESSED)
             buttonRing.setImageResource(R.drawable.baseline_block_24)
             buttonDisplayTime.setShapeType(PRESSED)
-            initiliazeMediaplayer ()
+            //initiliazeMediaplayer ()
             //mediaPlayer.start()
             editor.putBoolean("ALARM_STATE", true)
             localAlarmState = true // tells localy if the alarm is on or off
@@ -139,7 +138,7 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
             buttonRing.setShapeType(FLAT)
             buttonRing.setImageResource(R.drawable.baseline_circle_notifications_24)
             buttonDisplayTime.setShapeType(FLAT)
-            //mediaPlayer.pause() // stops sound when pressed
+            mediaPlayer.pause() // stops sound when pressed
             editor.putBoolean("ALARM_STATE", false)
            // alarmOn = false
         }
@@ -250,7 +249,7 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
         return
     }
     private fun stopAlarmByshaking() {
-        mediaPlayer.pause()
+        mediaPlayer.stop()
        buttonDisplayTime3.text= "Treshold reached"
     }
 

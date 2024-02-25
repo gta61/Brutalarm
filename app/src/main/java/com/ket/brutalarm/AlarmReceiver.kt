@@ -39,9 +39,9 @@ class AlarmReceiver : BroadcastReceiver()   {
             val isAlarmEnabled = sharedPrefAlarmState?.getBoolean("ALARM_STATE", false) ?: false
 
             if (isAlarmEnabled ){
-                val mediaPlayer: MediaPlayer? = MediaPlayer.create(context, R.raw.brutalshortsound1)
+                val mediaPlayer: MediaPlayer? = MediaPlayer.create(context, R.raw.softpiano)
                 mediaPlayer?.apply {
-                    isLooping = true
+                   //isLooping = true
                     setVolume(0.9f, 0.9f)
                     start()
                 }
