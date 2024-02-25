@@ -2,7 +2,6 @@ package com.ket.brutalarm
 
 import android.annotation.SuppressLint // the Pressed was underline because i could only be access withing the library so this fixes it.
 import android.app.TimePickerDialog
-import android.content.BroadcastReceiver
 import android.icu.util.Calendar
 import android.media.MediaPlayer
 import androidx.appcompat.app.AppCompatActivity
@@ -19,7 +18,6 @@ import android.content.Intent
 
 import android.app.PendingIntent
 import android.app.AlarmManager
-import android.app.PendingIntent.FLAG_UPDATE_CURRENT
 import android.hardware.Sensor
 import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
@@ -33,7 +31,7 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
 
      private lateinit var buttonDisplayTime1 : NeumorphButton
      private lateinit var buttonRing1 : NeumorphImageButton
-     var alarmOn = false
+    private var localAlarmState = false
     lateinit private var mediaPlayer: MediaPlayer
 
     private lateinit var sensorManagerAccelerometer: SensorManager
@@ -102,7 +100,7 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
         }
 
 
-        isRingingTime()
+        isRingingTime(localAlarmState)
     }
 
 // setting up the sensor, and working with the data on sensor change
@@ -125,8 +123,8 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
 
     @SuppressLint("RestrictedApi")
     private fun switchAlarmOnOff(buttonRing: NeumorphImageButton, buttonDisplayTime: NeumorphButton){
-        val sharedPref = getSharedPreferences("com.ket.brutalarm.PREFERENCE_FILE_KEY", MODE_PRIVATE)
-        val editor = sharedPref.edit()
+        val sharedPrefAlarmOnOff = getSharedPreferences("com.ket.brutalarm.PREFERENCE_FILE_KEY", MODE_PRIVATE)
+        val editor = sharedPrefAlarmOnOff.edit()
 
         // Change the neumorph_shapeType and Change the image source
         if (buttonRing.getShapeType() == FLAT){
@@ -134,14 +132,14 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
             buttonRing.setImageResource(R.drawable.baseline_block_24)
             buttonDisplayTime.setShapeType(PRESSED)
             initiliazeMediaplayer ()
-            mediaPlayer.start()
+            //mediaPlayer.start()
             editor.putBoolean("ALARM_STATE", true)
-           // alarmOn = true
+            localAlarmState = true // tells localy if the alarm is on or off
         } else {
             buttonRing.setShapeType(FLAT)
             buttonRing.setImageResource(R.drawable.baseline_circle_notifications_24)
             buttonDisplayTime.setShapeType(FLAT)
-            mediaPlayer.pause() // stops sound when pressed
+            //mediaPlayer.pause() // stops sound when pressed
             editor.putBoolean("ALARM_STATE", false)
            // alarmOn = false
         }
@@ -198,7 +196,8 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
     }
 
 
-    fun isRingingTime(){
+    fun isRingingTime(localAlarmState : Boolean){
+
         val calendar = Calendar.getInstance()
         val hour = calendar.get(Calendar.HOUR_OF_DAY)
         val minute = calendar.get(Calendar.MINUTE)
@@ -206,27 +205,16 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
         val userTime = buttonDisplayTime1.text.toString()
 
         // start playing sound
-        if (currentTime == userTime ){
+        if (currentTime == userTime && localAlarmState ){
             initiliazeMediaplayer()
             mediaPlayer.start()
 
         }
     }
 
-    override fun onStop() {
-        super.onStop() // has to be recalled
-        mediaPlayer.pause()
-    }
 
-    override fun onResume() {
-        super.onResume() // has to be recalled
-        //mediaPlayer.start()
-
-    }
 
     override fun onSensorChanged(event: SensorEvent?) {
-
-
 
         val curTime = System.currentTimeMillis()
         // Only allow one update every 100ms.
@@ -242,7 +230,7 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
 
             if (speed > SHAKE_THRESHOLD) {
                 // Shake detected, stop the alarm here
-                stopAlarm()
+                stopAlarmByshaking()
             }
 
             last_x = x
@@ -250,26 +238,33 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
             last_z = z
         }
 
-
-
-
-
+        // Displaying feedback to user
         if (event?.sensor?.type == Sensor.TYPE_ACCELEROMETER){
 
             val xvalue = String.format("%.1f", event.values[0])
             buttonDisplayTime2.text= xvalue
         }
     }
-   private fun stopAlarm() {
-        mediaPlayer.pause()
-
-       buttonDisplayTime3.text= "Treshold reached"
-    }
     override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {
 
-    return
+        return
+    }
+    private fun stopAlarmByshaking() {
+        mediaPlayer.pause()
+       buttonDisplayTime3.text= "Treshold reached"
     }
 
+
+    override fun onStop() {
+        super.onStop() // has to be recalled
+       //we dont want the clock to stop at that time mediaPlayer.pause()
+    }
+
+    override fun onResume() {
+        super.onResume() // has to be recalled
+        // hence no need to start after resume mediaPlayer.start()
+
+    }
     override fun onDestroy() {
         super.onDestroy()
         sensorManagerAccelerometer.unregisterListener(this)
