@@ -38,6 +38,16 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
 
     private lateinit var sensorManagerAccelerometer: SensorManager
     private lateinit var buttonDisplayTime2 : NeumorphButton
+    private lateinit var buttonDisplayTime3 : NeumorphButton
+
+
+    // Variables to hold sensor data
+    private var lastUpdate: Long = 0
+    private var last_x: Float = 0.0f
+    private var last_y: Float = 0.0f
+    private var last_z: Float = 0.0f
+    private val SHAKE_THRESHOLD = 8000 // Adjust this threshold based on your needs
+
 
     @SuppressLint("RestrictedApi")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -52,6 +62,8 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
         buttonRing1 = findViewById(R.id.buttonRing1)
 
         buttonDisplayTime2 = findViewById(R.id.Button2)// show the sensor data
+        buttonDisplayTime3 = findViewById(R.id.Button3)// show the Passed shaked data
+
 
 
         // Restore the saved time if it exists
@@ -212,13 +224,45 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
 
     override fun onSensorChanged(event: SensorEvent?) {
 
+
+
+        val curTime = System.currentTimeMillis()
+        // Only allow one update every 100ms.
+        if ((curTime - lastUpdate) > 100) {
+            val diffTime = curTime - lastUpdate
+            lastUpdate = curTime
+
+            val x = event?.values?.get(0) ?: 0f
+            val y = event?.values?.get(1) ?: 0f
+            val z = event?.values?.get(2) ?: 0f
+
+            val speed = Math.abs(x + y + z - last_x - last_y - last_z) / diffTime * 10000
+
+            if (speed > SHAKE_THRESHOLD) {
+                // Shake detected, stop the alarm here
+                stopAlarm()
+            }
+
+            last_x = x
+            last_y = y
+            last_z = z
+        }
+
+
+
+
+
         if (event?.sensor?.type == Sensor.TYPE_ACCELEROMETER){
 
-            val xvalue = event.values[0].toString()
+            val xvalue = String.format("%.1f", event.values[0])
             buttonDisplayTime2.text= xvalue
         }
     }
+   private fun stopAlarm() {
+        mediaPlayer.pause()
 
+       buttonDisplayTime3.text= "Treshold reached"
+    }
     override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {
 
     return
