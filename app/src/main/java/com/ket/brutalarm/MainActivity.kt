@@ -96,6 +96,7 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
 
             //sending the button to the switchfunction that will then also modify the display
             switchAlarmOnOff (buttonRing1, buttonDisplayTime1)
+            isRingingTime()
         }
 
 
@@ -165,7 +166,7 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
         }
 
         editor.apply() // Save the changes
-        isRingingTime()
+        //isRingingTime()
     }
 
 
@@ -214,6 +215,8 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
         }
 
         TimePickerDialog(this, timeSetListener, currentHour, currentMinute, DateFormat.is24HourFormat(this)).show()
+
+        isRingingTime() // check the state after the user does picks the time too
     }
 
 
@@ -224,7 +227,10 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
         // start playing sound and check that the alarm was turned on
         if (currentTime == userTime && localAlarmState) {
             initiliazeMediaplayer()
-            mediaPlayer.start()
+            if (!mediaPlayer.isPlaying){
+                mediaPlayer.start()
+            }
+
         }
     }
 
@@ -286,6 +292,7 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
        // val time = String.format("%02d:%02d", hourOfDay, minute)
         buttonDisplayTime3.text= "successfully Stop"
         buttonRing1.setShapeType(FLAT)
+        buttonDisplayTime1.setShapeType(FLAT)
         buttonRing1.setImageResource(R.drawable.baseline_circle_notifications_24)
 
     }
