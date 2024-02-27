@@ -1,11 +1,3 @@
-package com.ket.brutalarm
-
-import android.content.BroadcastReceiver
-import android.content.Context
-import android.content.Intent
-import android.media.MediaPlayer
-import androidx.appcompat.app.AppCompatActivity
-
 /**
  * A BroadcastReceiver that responds to broadcast intents by playing a specific audio file.
  *
@@ -29,6 +21,17 @@ import androidx.appcompat.app.AppCompatActivity
  */
 
 
+package com.ket.brutalarm
+
+import android.content.BroadcastReceiver
+import android.content.Context
+import android.content.Intent
+import android.media.MediaPlayer
+import androidx.appcompat.app.AppCompatActivity
+
+
+
+
 class AlarmReceiver : BroadcastReceiver()   {
     override fun onReceive(context: Context?, intent: Intent?) {
 
@@ -38,14 +41,15 @@ class AlarmReceiver : BroadcastReceiver()   {
             )
             val isAlarmEnabled = sharedPrefAlarmState?.getBoolean("ALARM_STATE", false) ?: false
 
-            if (isAlarmEnabled ){
-                val mediaPlayer: MediaPlayer? = MediaPlayer.create(context, R.raw.softpiano)
-                mediaPlayer?.apply {
-                   //isLooping = true
-                    setVolume(0.9f, 0.9f)
-                    //start()
-                }
-
+        if (isAlarmEnabled) {
+            val intent = Intent(context, MainActivity::class.java).apply {
+                // Flag to indicate that this intent should start the isRingingTime method
+                putExtra("ACTION", "RING_ALARM")
+                // Add FLAG_ACTIVITY_SINGLE_TOP to ensure the MainActivity is not recreated if it's already running
+                flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_SINGLE_TOP
             }
+            context?.startActivity(intent)
+        }
+
     }
 }

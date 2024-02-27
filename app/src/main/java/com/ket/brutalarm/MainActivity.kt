@@ -43,7 +43,7 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
     private var last_x: Float = 0.0f
     private var last_y: Float = 0.0f
     private var last_z: Float = 0.0f
-    private val SHAKE_THRESHOLD = 8000 // Adjust this threshold based on your needs
+    private val SHAKE_THRESHOLD = 4000 // Adjust this threshold based on your needs
 
 
     @SuppressLint("RestrictedApi")
@@ -96,11 +96,13 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
 
             //sending the button to the switchfunction that will then also modify the display
             switchAlarmOnOff (buttonRing1, buttonDisplayTime1)
-            isRingingTime()
+            //isRingingTime()
         }
 
-
-        isRingingTime()
+        //override onNewIntent() if your activity might already be running when the intent is received.
+        // when triggered by Alarmreceiver
+        handleIntent(intent)
+        isRingingTime() //not needed anymore, because the only place where it is started, it is from the AlarmReceiver
     }
 
 // setting up the sensor, and working with the data on sensor change
@@ -224,8 +226,11 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
         //getting data from method for cleaner code
         val (currentTime, userTime) = getCurrentAndUserTime()
 
+        val sharedPrefAlarmState = getSharedPreferences("com.ket.brutalarm.PREFERENCE_FILE_KEY", MODE_PRIVATE)
+        val isAlarmEnabled = sharedPrefAlarmState?.getBoolean("ALARM_STATE", false) ?: false
+
         // start playing sound and check that the alarm was turned on
-        if (currentTime == userTime && localAlarmState) {
+        if (currentTime == userTime && (localAlarmState || isAlarmEnabled )) {
             initiliazeMediaplayer()
             if (!mediaPlayer.isPlaying){
                 mediaPlayer.start()
@@ -296,6 +301,27 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
         buttonRing1.setImageResource(R.drawable.baseline_circle_notifications_24)
 
     }
+
+
+
+    //new
+
+
+    override fun onNewIntent(intent: Intent) {
+        super.onNewIntent(intent)
+        // Handle intent if activity is already running
+        handleIntent(intent)
+    }
+
+    private fun handleIntent(intent: Intent) {
+        // Check if the intent has the action to ring the alarm
+        if ("RING_ALARM" == intent.getStringExtra("ACTION")) {
+            isRingingTime()
+        }
+    }
+
+    //new
+
 
 
     override fun onStop() {
