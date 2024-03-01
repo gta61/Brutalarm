@@ -1,3 +1,12 @@
 <resources>
     <string name="app_name">Brutalarm</string>
+    <string name="instructions">instructions</string>
+    <string name="ShakeTostopTheAlarm">shake to stop the alarm clock</string>
+    <string name="alarmstopped">Alarm successfully stopped</string>
+    <string name="toastAlarmActivated">Clock Alarm clock activated</string>
+    <string name="toastNewcAlarm">New Alarm clock added</string>
+    <string name="toastAlarmRingsin">rings in</string>
+    <string name="toastAlarmMin">minute</string>
+    <string name="toastAlarmHour">hours</string>
+
 </resources>

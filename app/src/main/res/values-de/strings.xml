@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">Brutalarm.</string>4
+    <string name="instructions">Anweisungen</string>
+    <string name="ShakeTostopTheAlarm">Zum Stoppen schütteln</string>
+    <string name="alarmstopped">Wecker gestoppt</string>
+    <string name="toastAlarmActivated">Wecker aktiviert</string>
+    <string name="toastNewcAlarm">Neuer Wecker hinzugefügt</string>
+    <string name="toastAlarmRingsin">"Klingelt in "</string>
+    <string name="toastAlarmMin">minuten</string>
+    <string name="toastAlarmHour">Stunden</string>
+</resources>
