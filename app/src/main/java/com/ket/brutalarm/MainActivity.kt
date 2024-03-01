@@ -30,6 +30,7 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
 
      private lateinit var buttonDisplayTime1 : NeumorphButton
      private lateinit var buttonRing1 : NeumorphImageButton
+     private lateinit var buttonAddNewAlarm : NeumorphImageButton
      private var localAlarmState = false
     lateinit private var mediaPlayer: MediaPlayer
 
@@ -57,6 +58,7 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
         // the text on the button diplays the time the user picked
         buttonDisplayTime1 = findViewById(R.id.Button1)
         buttonRing1 = findViewById(R.id.buttonRing1)
+        buttonAddNewAlarm = findViewById(R.id.Button4NewAlarm) // add new clock.
 
         buttonDisplayTime2 = findViewById(R.id.Button2)// show the sensor data
         buttonDisplayTime3 = findViewById(R.id.Button3)// show the Passed shaked data
@@ -97,6 +99,11 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
             //sending the button to the switchfunction that will then also modify the display
             switchAlarmOnOff (buttonRing1, buttonDisplayTime1)
             //isRingingTime()
+        }
+
+        //listerner to create a new Alarm and inherit all  features. instead do it as an object
+        buttonAddNewAlarm.setOnClickListener {
+
         }
 
         //override onNewIntent() if your activity might already be running when the intent is received.
@@ -292,6 +299,7 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
 
         return
     }
+    @SuppressLint("RestrictedApi")
     private fun stopAlarmByshaking() {
         mediaPlayer.stop()
        // val time = String.format("%02d:%02d", hourOfDay, minute)
